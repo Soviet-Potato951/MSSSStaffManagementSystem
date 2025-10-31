@@ -4,6 +4,7 @@
         Title="Admin"
         Width="580" Height="360"
         WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
         Background="#FFF6F3F3">
 
     <!-- Alt+G closes via VM command -->

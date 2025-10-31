@@ -13,6 +13,8 @@ namespace StaffManager.UI.ViewModels
         private readonly ICsvSerialiser _csv;
         private IStaffRepository _repo;
 
+
+        private StoreMode _currentStoreMode;
         public StoreMode CurrentStoreMode
         {
             get => _currentStoreMode;
@@ -22,8 +24,6 @@ namespace StaffManager.UI.ViewModels
                     ChangeStoreMode(value);
             }
         }
-        private StoreMode _currentStoreMode;
-
         private string _statusMessage = "Ready";
         public string StatusMessage
         {
@@ -57,7 +57,6 @@ namespace StaffManager.UI.ViewModels
         public ObservableCollection<string> FilteredEntries { get; } = new();
 
         public ICommand LoadCsvCommand { get; }
-        public ICommand SaveCsvCommand { get; }
         public ICommand OpenAdminCommand { get; }
 
         public MainViewModel(IFileDialogService fileDialog, ICsvSerialiser csv, IStaffRepository repo, StoreMode initialMode)
@@ -68,13 +67,12 @@ namespace StaffManager.UI.ViewModels
             _currentStoreMode = initialMode;
 
             LoadCsvCommand = new RelayCommand(_ => LoadCsv());
-            SaveCsvCommand = new RelayCommand(_ => SaveCsv());
             RefreshLists();
 
             OpenAdminCommand = new RelayCommand(_ => OpenAdmin());
         }
 
-        public void OpenAdmin()
+        private void OpenAdmin()
         {
             var nameEmpty = string.IsNullOrWhiteSpace(FilterName);
             var idEmpty = string.IsNullOrWhiteSpace(FilterId);
@@ -116,7 +114,8 @@ namespace StaffManager.UI.ViewModels
             var win = new AdminWindow(adminVm) { Owner = Application.Current.MainWindow };
             win.ShowDialog();
         }
-        public void LoadCsv()
+
+        private void LoadCsv()
         {
             var path = _fileDialog.ShowOpenCsvDialog();
             if (path is null)
@@ -129,19 +128,6 @@ namespace StaffManager.UI.ViewModels
             _repo.ReplaceAll(records);
             StatusMessage = $"Loaded records.";
             RefreshLists();
-        }
-
-        public void SaveCsv()
-        {
-            var path = _fileDialog.ShowSaveCsvDialog();
-            if (path is null)
-            {
-                StatusMessage = "Save cancelled.";
-                return;
-            }
-            var records = _repo.AllOrdered();
-            _csv.Save(path, records);
-            StatusMessage = $"Saved records.";
         }
 
         private void ChangeStoreMode(StoreMode newMode)
