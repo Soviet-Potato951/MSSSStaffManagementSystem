@@ -10,6 +10,9 @@
     <!-- Alt+G closes via VM command -->
     <Window.InputBindings>
         <KeyBinding Modifiers="Alt" Key="G" Command="{Binding CloseAdminPanelKeybind}"/>
+        <KeyBinding Modifiers="Alt" Key="A" Command="{Binding AddStaffCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="U" Command="{Binding UpdateStaffCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="R" Command="{Binding RemoveStaffCommand}"/>
     </Window.InputBindings>
 
     <Grid Margin="16">
@@ -64,10 +67,10 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
-                <Button Content="Add"    Width="90" Margin="4,0" Command="{Binding AddStaffCommand}"/>
-                <Button Content="Update" Width="90" Margin="4,0" Command="{Binding UpdateStaffCommand}"/>
-                <Button Content="Remove" Width="90" Margin="4,0" Command="{Binding RemoveStaffCommand}"/>
-                <Button Content="Close (Alt+G)" Width="120" Margin="16,0,0,0"
+                <Button Content="Add (Alt+A)"    Width="90" Margin="4,0" Command="{Binding AddStaffCommand}"/>
+                <Button Content="Update (Alt+U)" Width="90" Margin="4,0" Command="{Binding UpdateStaffCommand}"/>
+                <Button Content="Remove (Alt+R)" Width="90" Margin="4,0" Command="{Binding RemoveStaffCommand}"/>
+                <Button Content="Close (Alt+G)" Width="90" Margin="4,0"
                         Command="{Binding CloseAdminPanelKeybind}"/>
             </StackPanel>
         </Grid>

@@ -10,7 +10,10 @@ namespace StaffManager.UI.ViewModels
     public class AdminViewModel : BaseViewModel
     {
         private readonly IStaffRepository _repo;
+
+        private readonly ICsvSerialiser _csvSerialiser;
         public event EventHandler? RequestClose;
+
 
         public ObservableCollection<KeyValuePair<int, string>> StaffEntries { get; } = new();
 
@@ -47,8 +50,9 @@ namespace StaffManager.UI.ViewModels
         public ICommand RemoveStaffCommand { get; }
         public ICommand CloseAdminPanelKeybind { get; }
 
-        public AdminViewModel(IStaffRepository repo, AdminSeed? staff = null)
+        public AdminViewModel(IStaffRepository repo, ICsvSerialiser csvSerialiser, AdminSeed? staff = null)
         {
+            _csvSerialiser = csvSerialiser;
             _repo = repo;
 
             if (staff is null)
@@ -63,7 +67,6 @@ namespace StaffManager.UI.ViewModels
                 if (!string.IsNullOrWhiteSpace(staff.StaffName)) StaffName = staff.StaffName!;
                 if (!staff.StaffId.HasValue && string.IsNullOrWhiteSpace(staff.StaffName))
                 {
-                    // both empty => your default behaviour
                     IsStaffIdReadOnly = false;
                     StaffId = 77;
                 }
@@ -73,13 +76,25 @@ namespace StaffManager.UI.ViewModels
             UpdateStaffCommand = new RelayCommand(_ => UpdateStaff());
             RemoveStaffCommand = new RelayCommand(_ => RemoveStaff());
             CloseAdminPanelKeybind = new RelayCommand(_ => ClosePanel());
+            _csvSerialiser = csvSerialiser;
         }
 
         private void AddStaff()
         {
-            if (string.IsNullOrWhiteSpace(StaffName)) { StatusMessage = "Name is required."; return; }
-            try { _repo.Add(StaffId, StaffName); StatusMessage = $"Added {StaffId} — {StaffName}"; ClearPanel(); }
-            catch (Exception ex) { StatusMessage = ex.Message; }
+            if (string.IsNullOrWhiteSpace(StaffName)) 
+            { 
+                StatusMessage = "Name is required."; return; 
+            }
+            try 
+            { 
+                _repo.Add(StaffId, StaffName); 
+                StatusMessage = $"Added {StaffId} — {StaffName}"; 
+                ClearPanel(); 
+            }
+            catch (Exception ex) 
+            { 
+                StatusMessage = ex.Message; 
+            }
         }
 
         private void UpdateStaff()
@@ -104,8 +119,7 @@ namespace StaffManager.UI.ViewModels
         private void ClosePanel()
         {
             RequestClose?.Invoke(this, EventArgs.Empty);
-            CsvSerialiser csvSerialiser = new CsvSerialiser();
-            csvSerialiser.Save("staff_master.csv", _repo.All());
+            _csvSerialiser.Save("staff_master.csv", _repo.All());
         }
     }
 }

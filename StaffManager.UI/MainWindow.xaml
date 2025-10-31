@@ -7,14 +7,14 @@
         xmlns:local="clr-namespace:StaffManager.UI"
         mc:Ignorable="d"
         Title="Staff Manager"
-        Width="900" Height="500">
+        Width="900" Height="500"
+        Loaded="Window_Loaded">
 
     <Window.Resources>
         <services:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
     </Window.Resources>
 
     <Window.InputBindings>
-        <KeyBinding Key="L" Modifiers="Alt" Command="{Binding DataContext.LoadCsvCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
         <KeyBinding Key="G" Modifiers="Alt" Command="{Binding DataContext.OpenAdminCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
     </Window.InputBindings>
 
@@ -71,7 +71,6 @@
         <Border Grid.Row="2" Padding="10" CornerRadius="6"
                 Background="White" BorderBrush="#FFCCCCCC" BorderThickness="1">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Content="Load CSV Alt+L" Width="120" Command="{Binding LoadCsvCommand}" Margin="4,0"/>
                 <Button Content="Focus Name Alt+N" Width="120" Command="{x:Static local:AppCommands.FocusName}" Margin="4,0"/>
                 <Button Content="Focus Id Alt+I" Width="120" Command="{x:Static local:AppCommands.FocusId}" Margin="4,0" />
                 <Button Content="Open Admin Alt+G" Width="120" Command="{Binding OpenAdminCommand}" Margin="4,0"/>

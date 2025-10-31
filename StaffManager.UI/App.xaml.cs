@@ -14,8 +14,8 @@ namespace StaffManager.UI
         {
             base.OnStartup(e);
 
-            var (fileDialog, csv, repo) = ServiceFactory.Create(StoreMode.Hash);
-            var vm = new MainViewModel(fileDialog, csv, repo, StoreMode.Hash);
+            var (csv, repo) = ServiceFactory.Create(StoreMode.Hash);
+            var vm = new MainViewModel(csv, repo, StoreMode.Hash);
             new MainWindow { DataContext = vm }.Show();
         }
     }

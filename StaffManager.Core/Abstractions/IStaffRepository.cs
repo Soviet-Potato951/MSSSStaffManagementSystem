@@ -8,14 +8,11 @@ namespace StaffManager.Core.Abstractions
 {
     public interface IStaffRepository
     {
-        bool Exists(int id);
-        bool TryGet(int id, out string name);
         IEnumerable<KeyValuePair<int, string>> All();
-        IEnumerable<KeyValuePair<int, string>> AllOrdered();
+        IEnumerable<KeyValuePair<int, string>> AllFiltered();
         void Add(int id, string name);
         void UpdateName(int id, string name);
         bool Remove(int id);
-        void Clear();
         void ReplaceAll(IEnumerable<KeyValuePair<int, string>> records);
     }
 }

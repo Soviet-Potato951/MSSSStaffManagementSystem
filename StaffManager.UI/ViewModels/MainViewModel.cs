@@ -9,7 +9,6 @@ namespace StaffManager.UI.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly IFileDialogService _fileDialog;
         private readonly ICsvSerialiser _csv;
         private IStaffRepository _repo;
 
@@ -59,17 +58,15 @@ namespace StaffManager.UI.ViewModels
         public ICommand LoadCsvCommand { get; }
         public ICommand OpenAdminCommand { get; }
 
-        public MainViewModel(IFileDialogService fileDialog, ICsvSerialiser csv, IStaffRepository repo, StoreMode initialMode)
+        public MainViewModel(ICsvSerialiser csv, IStaffRepository repo, StoreMode initialMode)
         {
-            _fileDialog = fileDialog;
             _csv = csv;
             _repo = repo;
             _currentStoreMode = initialMode;
 
             LoadCsvCommand = new RelayCommand(_ => LoadCsv());
-            RefreshLists();
-
             OpenAdminCommand = new RelayCommand(_ => OpenAdmin());
+            RefreshLists();
         }
 
         private void OpenAdmin()
@@ -110,14 +107,15 @@ namespace StaffManager.UI.ViewModels
                 };
             }
 
-            var adminVm = new AdminViewModel(_repo, seed);
+            var adminVm = new AdminViewModel(_repo, _csv, seed);
             var win = new AdminWindow(adminVm) { Owner = Application.Current.MainWindow };
             win.ShowDialog();
+            RefreshLists();
         }
 
         private void LoadCsv()
         {
-            var path = _fileDialog.ShowOpenCsvDialog();
+            var path = "staff_master.csv";
             if (path is null)
             {
                 StatusMessage = "Load cancelled.";
@@ -154,7 +152,7 @@ namespace StaffManager.UI.ViewModels
             var name = _filterName.Trim().ToLowerInvariant();
             var id = _filterId.Trim();
 
-            var query = _repo.AllOrdered();
+            var query = _repo.AllFiltered();
             if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(id))
                 return;
 

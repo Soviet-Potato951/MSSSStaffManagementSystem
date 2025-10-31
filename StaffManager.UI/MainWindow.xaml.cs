@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using StaffManager.UI;
+using StaffManager.UI.ViewModels;
+using System.Windows;
 using System.Windows.Input;
 
 namespace StaffManager.UI
@@ -11,6 +13,12 @@ namespace StaffManager.UI
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainViewModel vm && vm.LoadCsvCommand.CanExecute(null))
+                vm.LoadCsvCommand.Execute(null);
         }
 
         private void FocusName_Executed(object sender, ExecutedRoutedEventArgs e)

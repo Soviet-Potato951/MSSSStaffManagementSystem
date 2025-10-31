@@ -10,9 +10,8 @@ namespace StaffManager.UI.Composition
 {
     public static class ServiceFactory
     {
-        public static (IFileDialogService fileDialog, ICsvSerialiser csv, IStaffRepository repo) Create(StoreMode mode)
+        public static ( ICsvSerialiser csv, IStaffRepository repo) Create(StoreMode mode)
         {
-            IFileDialogService fileDialog = new FileDialogService();
             ICsvSerialiser csv = new CsvSerialiser();
 
             IDictionary<int, string> map = mode == StoreMode.Tree
@@ -20,7 +19,7 @@ namespace StaffManager.UI.Composition
                 : new Dictionary<int, string>();
 
             IStaffRepository repo = new StaffDictionary(map);
-            return (fileDialog, csv, repo);
+            return (csv, repo);
         }
 
         // used when the user switches modes mid-session
