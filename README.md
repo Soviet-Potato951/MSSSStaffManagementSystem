@@ -36,7 +36,7 @@ A Windows (WPF) application that loads **staff ID → name** records from CSV, s
 | General | **Alt+I** | Focus “Filter ID” |
 | General | **Tab** | Copy selected record from Filtered list to both filter text boxes |
 | General | **Alt+A** | Open Admin (modal) |
-| Admin | **Alt+G** | Close Admin *(project current)* → **should be Alt+L** per spec |
+| Admin | **Alt+G** | Close Admin |
 
 > The first ListBox is display‑only; the second ListBox is the “filtered & selectable” one.
 
