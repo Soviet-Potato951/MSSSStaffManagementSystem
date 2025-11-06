@@ -4,6 +4,7 @@ namespace StaffManager.Infrastructure.Csv
 {
     public class CsvSerialiser : ICsvSerialiser
     {
+        //Loads CSV file with format: ID,Name
         public IEnumerable<KeyValuePair<int, string>> Load(string filePath)
         {
             var lines = File.ReadAllLines(filePath);
@@ -21,6 +22,7 @@ namespace StaffManager.Infrastructure.Csv
             return result;
         }
 
+        //Saves CSV file with format: ID,Name
         public void Save(string filepath, IEnumerable<KeyValuePair<int, string>> records)
         {
             var lines = records.Select(kvp => $"{kvp.Key},{kvp.Value}");

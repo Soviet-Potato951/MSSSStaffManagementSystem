@@ -55,7 +55,7 @@
 
                 <ListBox x:Name="lstUnsorted"
                          Grid.Column="0"
-                         ItemsSource="{Binding UnsortedEntries}"
+                         ItemsSource="{Binding UnfilteredEntries}"
                          Focusable="False"/>
 
                 <Rectangle Grid.Column="1" Width="12" Fill="Transparent"/>

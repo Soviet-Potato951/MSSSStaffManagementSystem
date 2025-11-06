@@ -1,5 +1,4 @@
-﻿using StaffManager.UI;
-using StaffManager.UI.ViewModels;
+﻿using StaffManager.UI.ViewModels;
 using System.Windows;
 using System.Windows.Input;
 

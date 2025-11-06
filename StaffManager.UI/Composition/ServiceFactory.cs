@@ -1,15 +1,13 @@
-﻿// StaffManager.UI/Composition/ServiceFactory.cs
-using System.Collections.Generic;
-using StaffManager.Core.Abstractions;
-using StaffManager.Core.Domain;           // StoreMode
+﻿using StaffManager.Core.Abstractions;
+using StaffManager.Core.Domain;
 using StaffManager.Infrastructure.Csv;
 using StaffManager.Infrastructure.Repository;
-using StaffManager.UI.Services;
 
 namespace StaffManager.UI.Composition
 {
     public static class ServiceFactory
     {
+        // used at application startup to create initial services
         public static ( ICsvSerialiser csv, IStaffRepository repo) Create(StoreMode mode)
         {
             ICsvSerialiser csv = new CsvSerialiser();

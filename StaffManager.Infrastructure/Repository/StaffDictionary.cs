@@ -2,6 +2,7 @@
 
 namespace StaffManager.Infrastructure.Repository
 {
+    // Repository implementation using IDictionary<int, string> as the underlying data store
     public sealed class StaffDictionary : IStaffRepository
     {
         private readonly IDictionary<int, string> _staffRecords;
@@ -19,7 +20,7 @@ namespace StaffManager.Infrastructure.Repository
         {
             return _staffRecords.OrderBy(kvp => kvp.Key);
         }
-
+        // Adds a new staff member, generating a unique ID if 77 is provided
         public void Add(int id, string name)
         {
             if (id == 77)
@@ -36,21 +37,21 @@ namespace StaffManager.Infrastructure.Repository
             }
             _staffRecords[id] = name;
         }
-        
+        // Updates the name of an existing staff member
         public void UpdateName(int id, string name)
         {
             if (!_staffRecords.ContainsKey(id))
                 throw new ArgumentException($"No staff member found with ID {id}.");
             _staffRecords[id] = name;
         }
-
+        // Removes a staff member by ID
         public bool Remove(int id)
         {
             if (!_staffRecords.ContainsKey(id))
                 return false;
             return _staffRecords.Remove(id);
         }
-
+        // Replaces all existing records with the provided collection
         public void ReplaceAll(IEnumerable<KeyValuePair<int, string>> records)
         {
             _staffRecords.Clear();

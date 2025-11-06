@@ -12,7 +12,6 @@ namespace StaffManager.UI.ViewModels
         private readonly ICsvSerialiser _csv;
         private IStaffRepository _repo;
 
-
         private StoreMode _currentStoreMode;
         public StoreMode CurrentStoreMode
         {
@@ -52,23 +51,22 @@ namespace StaffManager.UI.ViewModels
             }
         }
 
-        public ObservableCollection<string> UnsortedEntries { get; } = new();
+        public ObservableCollection<string> UnfilteredEntries { get; } = new();
         public ObservableCollection<string> FilteredEntries { get; } = new();
 
         public ICommand LoadCsvCommand { get; }
         public ICommand OpenAdminCommand { get; }
-
+        // Constructor initializing dependencies and commands
         public MainViewModel(ICsvSerialiser csv, IStaffRepository repo, StoreMode initialMode)
         {
             _csv = csv;
             _repo = repo;
             _currentStoreMode = initialMode;
-
             LoadCsvCommand = new RelayCommand(_ => LoadCsv());
             OpenAdminCommand = new RelayCommand(_ => OpenAdmin());
             RefreshLists();
         }
-
+        // Opens the admin panel with optional pre-filled filters
         private void OpenAdmin()
         {
             var nameEmpty = string.IsNullOrWhiteSpace(FilterName);
@@ -112,7 +110,7 @@ namespace StaffManager.UI.ViewModels
             win.ShowDialog();
             RefreshLists();
         }
-
+        // Loads staff records from a CSV file
         private void LoadCsv()
         {
             var path = "staff_master.csv";
@@ -127,7 +125,7 @@ namespace StaffManager.UI.ViewModels
             StatusMessage = $"Loaded records.";
             RefreshLists();
         }
-
+        // Changes the storage mode of the repository
         private void ChangeStoreMode(StoreMode newMode)
         {
             var snapshot = _repo.All().ToArray();
@@ -135,20 +133,19 @@ namespace StaffManager.UI.ViewModels
             RefreshLists();
             StatusMessage = $"Switched to {newMode}.";
         }
-
+        // Refreshes both unfiltered and filtered staff entry lists
         private void RefreshLists()
         {
-            UnsortedEntries.Clear();
+            UnfilteredEntries.Clear();
             foreach (var kv in _repo.All())
-                UnsortedEntries.Add($"{kv.Key} — {kv.Value}");
+                UnfilteredEntries.Add($"{kv.Key} — {kv.Value}");
 
             ApplyFilter();
         }
-
+        // Applies current filters to the staff entries
         private void ApplyFilter()
         {
             FilteredEntries.Clear();
-
             var name = _filterName.Trim().ToLowerInvariant();
             var id = _filterId.Trim();
 

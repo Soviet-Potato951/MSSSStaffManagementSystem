@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 using StaffManager.Core.Abstractions;
-using StaffManager.Infrastructure.Csv;
 using StaffManager.UI.Composition;
 
 namespace StaffManager.UI.ViewModels
@@ -13,7 +13,6 @@ namespace StaffManager.UI.ViewModels
 
         private readonly ICsvSerialiser _csvSerialiser;
         public event EventHandler? RequestClose;
-
 
         public ObservableCollection<KeyValuePair<int, string>> StaffEntries { get; } = new();
 
@@ -50,6 +49,7 @@ namespace StaffManager.UI.ViewModels
         public ICommand RemoveStaffCommand { get; }
         public ICommand CloseAdminPanelKeybind { get; }
 
+        //Loads admin panel with optional seed data
         public AdminViewModel(IStaffRepository repo, ICsvSerialiser csvSerialiser, AdminSeed? staff = null)
         {
             _csvSerialiser = csvSerialiser;
@@ -76,9 +76,8 @@ namespace StaffManager.UI.ViewModels
             UpdateStaffCommand = new RelayCommand(_ => UpdateStaff());
             RemoveStaffCommand = new RelayCommand(_ => RemoveStaff());
             CloseAdminPanelKeybind = new RelayCommand(_ => ClosePanel());
-            _csvSerialiser = csvSerialiser;
         }
-
+        //Adds new staff entry
         private void AddStaff()
         {
             if (string.IsNullOrWhiteSpace(StaffName)) 
@@ -96,26 +95,31 @@ namespace StaffManager.UI.ViewModels
                 StatusMessage = ex.Message; 
             }
         }
-
+        //Updates existing staff entry
         private void UpdateStaff()
         {
-            try { _repo.UpdateName(StaffId, StaffName); StatusMessage = $"Updated {StaffId} — {StaffName}"; ClearPanel(); }
+            try 
+            {
+                _repo.UpdateName(StaffId, StaffName); 
+                StatusMessage = $"Updated {StaffId} — {StaffName}"; 
+                ClearPanel(); 
+            }
             catch (Exception ex) { StatusMessage = ex.Message; }
         }
-
+        //Removes staff entry
         private void RemoveStaff()
         {
             if (_repo.Remove(StaffId)) { StatusMessage = $"Removed {StaffId}"; ClearPanel(); }
             else { StatusMessage = "ID not found."; }
         }
-
+        //Clears input fields in the admin panel
         private void ClearPanel()
         {
             StaffId = 77;
             StaffName = string.Empty;
             IsStaffIdReadOnly = false;
         }
-
+        //Closes the admin panel and saves data to CSV
         private void ClosePanel()
         {
             RequestClose?.Invoke(this, EventArgs.Empty);
